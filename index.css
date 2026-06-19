@@ -1,0 +1,280 @@
+:root {
+    --bg-color: #0D0B12;
+    --glow-accent: #5B3FBF;
+    --lavender: #C4B8E8;
+    --muted: #6B6080;
+    --border: #1E1A2E;
+    --text-light: #FAFAFA;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    background-color: var(--bg-color);
+    color: var(--text-light);
+    font-family: 'DM Sans', sans-serif;
+    min-height: 150vh; /* Increased to allow scrolling effect */
+    display: flex;
+    flex-direction: column;
+    overflow-x: hidden;
+}
+
+/* Background Effects */
+.noise-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    pointer-events: none;
+    z-index: 10;
+    opacity: 0.03;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+}
+
+.glow-bg {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 600px;
+    height: 600px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(91, 63, 191, 0.08) 0%, rgba(13, 11, 18, 0) 70%);
+    pointer-events: none;
+    z-index: 0;
+}
+
+/* Main Layout */
+.hero {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    z-index: 1;
+    min-height: calc(100vh - 60px); /* accounting for footer approx height */
+    padding: 2rem;
+}
+
+/* Typography & Elements */
+.eyebrow {
+    font-size: 10px;
+    letter-spacing: 0.3em;
+    color: var(--muted);
+    text-transform: uppercase;
+    margin-bottom: 24px;
+    font-weight: 500;
+}
+
+.logo-container {
+    position: relative;
+    margin-bottom: 32px;
+    perspective: 1000px;
+}
+
+.logo-3d {
+    transform-style: preserve-3d;
+    will-change: transform;
+    position: relative;
+}
+
+.logo-img {
+    width: 80vw;
+    max-width: 520px;
+    height: auto;
+    display: block;
+    position: relative;
+    z-index: 2;
+    filter: drop-shadow(0 24px 80px rgba(91, 63, 191, 0.55));
+    will-change: transform;
+}
+
+/* Fallback/additional glow positioned approximately where the ball might be */
+.ball-glow {
+    position: absolute;
+    width: 25%;
+    height: 60%;
+    border-radius: 50%;
+    top: 20%;
+    left: 60%; /* 'o' in 'spot' */
+    box-shadow: 0 24px 80px rgba(91, 63, 191, 0.55);
+    z-index: 1;
+    pointer-events: none;
+    will-change: transform;
+}
+
+.floating {
+    animation: float 5s ease-in-out infinite;
+}
+
+@keyframes float {
+    0% { transform: translateY(0); }
+    50% { transform: translateY(-10px); }
+    100% { transform: translateY(0); }
+}
+
+.tagline {
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    font-size: 22px;
+    color: var(--lavender);
+    font-weight: 400;
+    margin-bottom: 40px;
+}
+
+.cta-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.cta-btn {
+    display: inline-block;
+    padding: 14px 36px;
+    border-radius: 100px;
+    border: 1px solid var(--glow-accent);
+    background: transparent;
+    color: var(--text-light);
+    text-decoration: none;
+    font-size: 13px;
+    letter-spacing: 0.05em;
+    font-weight: 500;
+    transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    margin-bottom: 12px;
+    cursor: pointer;
+}
+
+.cta-btn:hover {
+    background-color: var(--glow-accent);
+    transform: scale(1.03);
+    box-shadow: 0 0 32px rgba(91, 63, 191, 0.5);
+}
+
+.micro-text {
+    font-size: 11px;
+    color: var(--muted);
+    letter-spacing: 0.05em;
+}
+
+/* Animations */
+.fade-up {
+    opacity: 0;
+    transform: translateY(20px);
+    animation: fadeUpAnim 0.8s ease-out forwards;
+    will-change: opacity, transform;
+}
+
+.fade-scale {
+    opacity: 0;
+    transform: scale(0.92);
+    animation: fadeScaleAnim 1.2s ease-out forwards;
+    will-change: opacity, transform;
+}
+
+@keyframes fadeUpAnim {
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes fadeScaleAnim {
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+.delay-1 { animation-delay: 0.3s; }
+.delay-2 { animation-delay: 0s; } /* Logo loads first */
+.delay-3 { animation-delay: 0.6s; }
+.delay-4 { animation-delay: 0.9s; }
+.delay-5 { animation-delay: 1.2s; }
+
+/* Scroll Hint */
+.scroll-hint {
+    position: absolute;
+    bottom: 40px;
+    left: 50%;
+    transform: translateX(-50%);
+    opacity: 0;
+    animation: fadeUpAnim 0.8s ease-out forwards, pulseOpacity 2s infinite alternate;
+    animation-delay: 1.2s, 2s;
+}
+
+.mouse {
+    width: 20px;
+    height: 32px;
+    border: 1px solid var(--glow-accent);
+    border-radius: 10px;
+    position: relative;
+    display: flex;
+    justify-content: center;
+}
+
+.wheel {
+    width: 2px;
+    height: 6px;
+    background-color: var(--glow-accent);
+    border-radius: 2px;
+    margin-top: 6px;
+    animation: scroll 2s ease-in-out infinite;
+}
+
+@keyframes scroll {
+    0% { transform: translateY(0); opacity: 1; }
+    100% { transform: translateY(10px); opacity: 0; }
+}
+
+@keyframes pulseOpacity {
+    from { opacity: 0.3; }
+    to { opacity: 1; }
+}
+
+/* Footer */
+footer {
+    border-top: 1px solid var(--border);
+    padding: 20px 24px;
+    position: relative;
+    z-index: 2;
+    background-color: var(--bg-color);
+}
+
+.footer-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.footer-left, .footer-right {
+    font-size: 10px;
+    color: #4A4060;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+
+.footer-right:hover {
+    color: var(--lavender);
+}
+
+@media (max-width: 768px) {
+    .footer-content {
+        flex-direction: column;
+        gap: 12px;
+        text-align: center;
+    }
+    
+    .scroll-hint {
+        display: none;
+    }
+}

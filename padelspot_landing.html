@@ -1,0 +1,638 @@
+<!DOCTYPE html>
+<html lang="pl">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Padel Spot · Kraków</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link
+    href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap"
+    rel="stylesheet">
+  <style>
+    *,
+    *::before,
+    *::after {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    :root {
+      --purple: #9b78f0;
+      --purple-dark: #7a54d6;
+      --purple-deep: #5532a8;
+      --purple-light: #e5dcf7;
+      --cream: #F5F2EE;
+      --off-white: #ffffff;
+      --text-dark: #120b1f;
+      /* Dark text for light mode */
+      --bg-color: #FAFAFA;
+      --accent: #7a54d6;
+      /* Changed to purple */
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      background: var(--bg-color);
+      color: var(--text-dark);
+      font-family: 'DM Sans', sans-serif;
+      font-weight: 300;
+      min-height: 100vh;
+      overflow-x: hidden;
+      position: relative;
+    }
+
+    /* Subtle paper texture via noise */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+      pointer-events: none;
+      z-index: 0;
+      opacity: 0.6;
+    }
+
+    /* ── LAYOUT ── */
+    .page {
+      position: relative;
+      z-index: 1;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 60px 32px;
+      gap: 0;
+    }
+
+    /* ── CORNER LABELS ── */
+    .corner {
+      position: fixed;
+      font-size: 10px;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: #888;
+      font-weight: 400;
+    }
+
+    .corner-tl {
+      top: 28px;
+      left: 32px;
+    }
+
+    .corner-tr {
+      top: 28px;
+      right: 32px;
+      text-align: right;
+    }
+
+    .corner-bl {
+      bottom: 28px;
+      left: 32px;
+    }
+
+    .corner-br {
+      bottom: 28px;
+      right: 32px;
+      text-align: right;
+    }
+
+    /* ── THIN DECORATIVE LINES ── */
+    .line-h {
+      width: 1px;
+      background: linear-gradient(to bottom, transparent, #c8bfe0 40%, #c8bfe0 60%, transparent);
+      flex-shrink: 0;
+    }
+
+    /* ── HERO SECTION ── */
+    .hero {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0;
+      animation: fadeUp 1s ease both;
+    }
+
+    @keyframes fadeUp {
+      from {
+        opacity: 0;
+        transform: translateY(24px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .eyebrow {
+      font-size: 10px;
+      letter-spacing: 0.28em;
+      text-transform: uppercase;
+      color: #777;
+      margin-bottom: 20px;
+      animation: fadeUp 1s ease 0.1s both;
+    }
+
+    /* ── LOGO ── */
+    .logo-wrap {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      margin-bottom: 12px;
+      animation: fadeUp 1s ease 0.2s both;
+      position: relative;
+    }
+
+    .spotlight-glow {
+      position: absolute;
+      top: 40%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 140vw;
+      max-width: 900px;
+      height: 500px;
+      background: radial-gradient(ellipse at center, rgba(155, 120, 240, 0.2) 0%, rgba(139, 111, 223, 0.08) 35%, transparent 70%);
+      filter: blur(40px);
+      z-index: -1;
+      pointer-events: none;
+      animation: pulseLight 4s alternate infinite;
+    }
+
+    @keyframes pulseLight {
+      0% {
+        opacity: 0.7;
+        transform: translate(-50%, -50%) scale(0.95);
+      }
+
+      100% {
+        opacity: 1;
+        transform: translate(-50%, -50%) scale(1.05);
+      }
+    }
+
+    .logo-text {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      perspective: 1000px;
+    }
+
+    .logo-float-wrapper {
+      animation: floatLogo 6s ease-in-out infinite;
+      transform-style: preserve-3d;
+      margin-bottom: 24px;
+    }
+
+    .main-logo-img {
+      width: 85vw;
+      max-width: 340px;
+      height: auto;
+      display: block;
+      filter: drop-shadow(0 20px 40px rgba(91, 63, 191, 0.4));
+      transition: transform 0.1s ease-out, filter 0.3s ease;
+      will-change: transform;
+      cursor: crosshair;
+    }
+
+    .main-logo-img:hover {
+      filter: drop-shadow(0 30px 60px rgba(139, 111, 223, 0.6));
+    }
+
+    @keyframes floatLogo {
+
+      0%,
+      100% {
+        transform: translateY(0);
+      }
+
+      50% {
+        transform: translateY(-15px);
+      }
+    }
+
+    /* "Padel" wordmark small above */
+    .padel-label {
+      font-size: 10px;
+      letter-spacing: 0.35em;
+      text-transform: uppercase;
+      color: var(--purple);
+      margin-bottom: 6px;
+      font-weight: 400;
+    }
+
+    /* Kraków sub-label */
+    .city-label {
+      font-size: 10px;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      color: #777;
+      margin-top: 10px;
+      font-weight: 500;
+    }
+
+    /* ── DIVIDER ── */
+    .divider {
+      width: 32px;
+      height: 1px;
+      background: var(--purple);
+      margin: 32px auto;
+      opacity: 0.3;
+      animation: fadeUp 1s ease 0.4s both;
+    }
+
+    /* ── SLOGAN ── */
+    .slogan {
+      font-size: clamp(15px, 3vw, 20px);
+      letter-spacing: 0.04em;
+      color: #555;
+      text-align: center;
+      font-family: 'DM Sans', sans-serif;
+      font-weight: 300;
+      animation: fadeUp 1s ease 0.5s both;
+      margin-bottom: 40px;
+    }
+
+    .slogan strong {
+      color: var(--accent);
+      font-weight: 600;
+      text-shadow: none;
+    }
+
+    /* ── CTA BUTTON ── */
+    .cta-wrap {
+      animation: fadeUp 1s ease 0.65s both;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .cta-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+      background: var(--purple-deep);
+      color: #fff;
+      text-decoration: none;
+      font-size: 11px;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      font-weight: 500;
+      padding: 16px 32px;
+      border-radius: 100px;
+      transition: background 0.25s ease, transform 0.18s ease, box-shadow 0.25s ease;
+      font-family: 'DM Sans', sans-serif;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .cta-btn::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 50%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.25), transparent);
+      transform: skewX(-20deg);
+      animation: shine 4s infinite;
+    }
+
+    @keyframes shine {
+      0% {
+        left: -100%;
+      }
+
+      20% {
+        left: 200%;
+      }
+
+      100% {
+        left: 200%;
+      }
+    }
+
+    .cta-btn:hover {
+      background: var(--purple);
+      transform: translateY(-2px);
+      box-shadow: 0 12px 40px rgba(91, 63, 191, 0.3);
+    }
+
+    .cta-btn svg {
+      width: 18px;
+      height: 18px;
+      flex-shrink: 0;
+    }
+
+    .handle-hint {
+      font-size: 10px;
+      letter-spacing: 0.16em;
+      color: #777;
+      text-transform: uppercase;
+    }
+
+    /* ── SOCIAL STRIP ── */
+    .social-strip {
+      margin-top: 64px;
+      display: flex;
+      align-items: center;
+      gap: 24px;
+      animation: fadeUp 1s ease 0.8s both;
+    }
+
+    .social-line {
+      width: 40px;
+      height: 1px;
+      background: #e0e0e0;
+    }
+
+    .social-label {
+      font-size: 10px;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: #888;
+    }
+
+    /* ── FLOATING BALL DECORATION ── */
+    .deco-ball {
+      position: fixed;
+      border-radius: 50%;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .deco-ball-1 {
+      width: 400px;
+      height: 400px;
+      background: radial-gradient(circle at 40% 40%, rgba(155, 120, 240, 0.15), transparent 70%);
+      top: -100px;
+      right: -100px;
+      animation: float1 8s ease-in-out infinite;
+    }
+
+    .deco-ball-2 {
+      width: 300px;
+      height: 300px;
+      background: radial-gradient(circle at 60% 60%, rgba(100, 70, 200, 0.12), transparent 70%);
+      bottom: 40px;
+      left: -60px;
+      animation: float1 10s ease-in-out 2s infinite;
+    }
+
+    @keyframes float1 {
+
+      0%,
+      100% {
+        transform: translate(0, 0);
+      }
+
+      50% {
+        transform: translate(12px, -18px);
+      }
+    }
+
+    /* ── SPONSORS SECTION ── */
+    .sponsors-section {
+      margin-top: 60px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 24px;
+      animation: fadeUp 1s ease 1s both;
+      width: 100%;
+    }
+
+    .sponsors-title {
+      font-size: 10px;
+      letter-spacing: 0.28em;
+      text-transform: uppercase;
+      color: #777;
+    }
+
+    .sponsors-grid {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      align-items: center;
+      gap: 40px;
+    }
+
+    .sponsor-logo {
+      height: 40px;
+      width: auto;
+      max-width: 160px;
+      object-fit: contain;
+      filter: grayscale(100%) opacity(60%);
+      transition: filter 0.3s ease, transform 0.3s ease;
+    }
+
+    .sponsor-logo.sponsor-large {
+      height: 65px;
+      max-width: 200px;
+    }
+
+    .sponsor-logo.sponsor-white {
+      filter: invert(1) opacity(60%);
+    }
+
+    .sponsor-logo:hover {
+      filter: grayscale(0%) opacity(100%);
+      transform: scale(1.05);
+    }
+
+    .sponsor-logo.sponsor-white:hover {
+      filter: invert(1) opacity(100%);
+    }
+
+    /* ── FOOTER LINE ── */
+    .footer-line {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 3px;
+      background: linear-gradient(90deg, var(--purple-deep), var(--purple-light), var(--purple-deep));
+    }
+
+    .cursor-glow {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 60px;
+      height: 60px;
+      background: radial-gradient(circle, rgba(155, 120, 240, 0.4) 0%, transparent 70%);
+      border-radius: 50%;
+      pointer-events: none;
+      margin-top: -30px;
+      margin-left: -30px;
+      filter: blur(5px);
+      z-index: 9999;
+      mix-blend-mode: multiply;
+      transition: opacity 0.3s;
+      opacity: 0;
+    }
+
+    @media (max-width: 480px) {
+
+      .corner-bl,
+      .corner-br {
+        display: none;
+      }
+
+      .page {
+        padding: 80px 24px 60px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="deco-ball deco-ball-1"></div>
+  <div class="deco-ball deco-ball-2"></div>
+
+  <!-- Corner Labels -->
+  <span class="corner corner-tl">Padel Spot</span>
+  <span class="corner corner-tr">Kraków, PL</span>
+  <span class="corner corner-bl">© 2025</span>
+  <span class="corner corner-br">Follow us ↗</span>
+
+  <main class="page">
+    <div class="hero">
+
+      <!-- <p class="eyebrow">PADEL CENTER • KRK/Modlniczka</p> -->
+
+      <div class="logo-wrap">
+        <div class="spotlight-glow"></div>
+        <div class="logo-text logo-float-wrapper">
+          <img src="logo.png" alt="Padel Spot" class="main-logo-img" id="tilt-logo">
+        </div>
+        <span class="city-label">Kraków</span>
+      </div>
+
+      <div class="divider"></div>
+
+      <p class="slogan">Purple is <strong>the new black.</strong></p>
+
+      <div class="cta-wrap">
+        <a class="cta-btn" href="https://www.instagram.com/_padelspot_/" target="_blank" rel="noopener">
+          <!-- Instagram icon -->
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"
+            stroke-linejoin="round">
+            <rect x="2" y="2" width="20" height="20" rx="5" ry="5" />
+            <circle cx="12" cy="12" r="4" />
+            <circle cx="17.5" cy="6.5" r="0.5" fill="currentColor" stroke="none" />
+          </svg>
+          Follow us on Instagram
+        </a>
+        <span class="handle-hint">@_padelspot_</span>
+      </div>
+
+      <div class="social-strip">
+        <span class="social-line"></span>
+        <span class="social-label">All updates on IG</span>
+        <span class="social-line"></span>
+      </div>
+
+      <!-- SEKCJA SPONSORÓW -->
+      <div class="sponsors-section">
+        <span class="sponsors-title">Nasi Partnerzy</span>
+        <div class="sponsors-grid">
+          <!-- INSTRUKCJA: Aby dodać loga, odkomentuj lub skopiuj poniższą linijkę, zamieniając 'src' na nazwę Twojego pliku, np. "sponsor1.png" -->
+          <a href="https://fitness.hidrami.com/" target="_blank" rel="noopener noreferrer" class="sponsor-link">
+            <img src="hidrami.png" alt="Sponsor" class="sponsor-logo">
+          </a>
+          <a href="https://www.mejorset.com/eng" target="_blank" rel="noopener noreferrer" class="sponsor-link">
+            <img src="mejorset.png" alt="Sponsor" class="sponsor-logo">
+          </a>
+          <a href="https://www.babolat.com/pl" target="_blank" rel="noopener noreferrer" class="sponsor-link">
+            <img src="babolat.png" alt="Sponsor" class="sponsor-logo sponsor-white">
+          </a>
+          <a href="https://us.thehoffbrand.com/" target="_blank" rel="noopener noreferrer" class="sponsor-link">
+            <img src="hoff.png" alt="Sponsor" class="sponsor-logo sponsor-white sponsor-large">
+          </a>
+          <a href="https://www.recman.pl/" target="_blank" rel="noopener noreferrer" class="sponsor-link">
+            <img src="recman.png" alt="Sponsor" class="sponsor-logo sponsor-white sponsor-large">
+          </a>
+          <a href="https://web.landrover.pl/znajdz-dealera/sprzedaz/pro-moto" target="_blank" rel="noopener noreferrer"
+            class="sponsor-link">
+            <img src="range-rover.png" alt="Sponsor" class="sponsor-logo sponsor-white">
+          </a>
+        </div>
+      </div>
+
+    </div>
+  </main>
+
+  <div class="footer-line"></div>
+
+  <script>
+    const logo = document.getElementById('tilt-logo');
+    const deco1 = document.querySelector('.deco-ball-1');
+    const deco2 = document.querySelector('.deco-ball-2');
+
+    // Custom cursor
+    const cursor = document.createElement('div');
+    cursor.classList.add('cursor-glow');
+    document.body.appendChild(cursor);
+
+    let mouseX = window.innerWidth / 2;
+    let mouseY = window.innerHeight / 2;
+    let currentX = mouseX;
+    let currentY = mouseY;
+    let isMouseInside = false;
+
+    document.addEventListener('mousemove', (e) => {
+      mouseX = e.clientX;
+      mouseY = e.clientY;
+      if (!isMouseInside) {
+        cursor.style.opacity = '1';
+        isMouseInside = true;
+      }
+    });
+
+    function animate() {
+      // Lerp for smooth cursor
+      currentX += (mouseX - currentX) * 0.15;
+      currentY += (mouseY - currentY) * 0.15;
+
+      cursor.style.transform = `translate(${currentX}px, ${currentY}px)`;
+
+      // Lerp for tilt and parallax
+      const xAxis = (window.innerWidth / 2 - currentX) / 25;
+      const yAxis = (window.innerHeight / 2 - currentY) / 25;
+
+      if (logo) {
+        logo.style.transform = `rotateY(${xAxis}deg) rotateX(${yAxis}deg) translateZ(30px)`;
+      }
+
+      if (deco1) deco1.style.transform = `translate(${xAxis * 2}px, ${yAxis * 2}px)`;
+      if (deco2) deco2.style.transform = `translate(${-xAxis * 2}px, ${-yAxis * 2}px)`;
+
+      requestAnimationFrame(animate);
+    }
+
+    animate();
+
+    document.addEventListener('mouseleave', () => {
+      mouseX = window.innerWidth / 2;
+      mouseY = window.innerHeight / 2;
+      cursor.style.opacity = '0';
+      isMouseInside = false;
+    });
+
+    document.addEventListener('mouseenter', () => {
+      cursor.style.opacity = '1';
+      isMouseInside = true;
+    });
+  </script>
+</body>
+
+</html>
