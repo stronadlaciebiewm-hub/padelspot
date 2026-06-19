@@ -451,15 +451,7 @@
       filter: invert(1) opacity(100%);
     }
 
-    /* ── FOOTER LINE ── */
-    .footer-line {
-      position: fixed;
-      bottom: 0;
-      left: 0;
-      right: 0;
-      height: 3px;
-      background: linear-gradient(90deg, var(--purple-deep), var(--purple-light), var(--purple-deep));
-    }
+
 
     .cursor-glow {
       position: fixed;
@@ -487,7 +479,31 @@
       }
 
       .page {
-        padding: 80px 24px 60px;
+        padding: 60px 20px 40px;
+      }
+
+      .main-logo-img {
+        width: 70vw;
+        max-width: 250px;
+      }
+
+      .slogan {
+        font-size: 16px;
+        margin-bottom: 30px;
+      }
+
+      .sponsors-grid {
+        gap: 20px;
+      }
+
+      .sponsor-logo {
+        height: 30px;
+        max-width: 120px;
+      }
+
+      .sponsor-logo.sponsor-large {
+        height: 45px;
+        max-width: 150px;
       }
     }
   </style>
@@ -571,7 +587,7 @@
     </div>
   </main>
 
-  <div class="footer-line"></div>
+
 
   <script>
     const logo = document.getElementById('tilt-logo');
